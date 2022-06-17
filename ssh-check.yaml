@@ -12,8 +12,8 @@ spec:
     testLabel: testLabel
   podSpec:
     containers:
-      - name: minio-test
-        image: kuberhealthy/ssh-check:v1.0.0
+      - name: ssh-check
+        image: rjacks161/ssh-check:v1.0.0
         imagePullPolicy: IfNotPresent
         env:
           - name: SSH_PRIVATE_KEY

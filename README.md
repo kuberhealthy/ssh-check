@@ -21,8 +21,8 @@ spec:
     testLabel: testLabel
   podSpec:
     containers:
-      - name: minio-test
-        image: kuberhealthy/ssh-check:v1.0.0
+      - name: ssh-check
+        image: rjacks161/ssh-check:v1.0.0
         imagePullPolicy: IfNotPresent
         env:
           - name: SSH_PRIVATE_KEY
@@ -40,3 +40,6 @@ spec:
 #### How-to
 
 Apply a `.yaml` file similar to the one shown above with `kubectl apply -f`
+
+#### SSH Exclude List
+The exclude list is a space delimited list of node names that the user would like to exclude from the ssh check.

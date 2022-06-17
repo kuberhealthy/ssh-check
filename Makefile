@@ -1,7 +1,7 @@
 default: build push
 
 build: 
-	docker build -t rjacks161/ssh-check:v1.0.0 .
+	docker build -t hub.comcast.net/k8s-eng/ssh-check:v1.0.0 .
 
 push: 
-	docker push rjacks161/ssh-check:v1.0.0 
+	docker push hub.comcast.net/k8s-eng/ssh-check:v1.0.0 
