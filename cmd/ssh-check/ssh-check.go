@@ -48,13 +48,25 @@ func main() {
 
 	ctx := context.Background()
 
-	client, err := createClient(kubeConfigFile)
+	cfg, err := rest.InClusterConfig()
+	if err != nil {
+		cfg, err = clientcmd.BuildConfigFromFlags("", kubeConfigFile)
+		if err != nil {
+			errs = append(errs, err.Error())
+			if reportErr := kh.ReportFailure(errs); reportErr != nil {
+				log.Fatalln("error reporting to kuberhealthy: ", reportErr)
+			}
+			return
+		}
+	}
+
+	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
 		errs = append(errs, err.Error())
-		err = kh.ReportFailure(errs)
-		if err != nil {
-			log.Fatalln("error reporting to kuberhealthy: ", err)
+		if reportErr := kh.ReportFailure(errs); reportErr != nil {
+			log.Fatalln("error reporting to kuberhealthy: ", reportErr)
 		}
+		return
 	}
 
 	log.Infoln("Kubernetes client created.")
