@@ -13,7 +13,7 @@ spec:
   podSpec:
     containers:
       - name: ssh-check
-        image: rjacks161/ssh-check:v1.0.0
+        image: rjacks161/ssh-check:v1.1.0
         imagePullPolicy: IfNotPresent
         env:
           - name: SSH_PRIVATE_KEY
