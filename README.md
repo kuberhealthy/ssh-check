@@ -7,7 +7,7 @@ This check requires two environment variables in the kube spec used to deploy it
 
 ```yaml
 ---
-apiVersion: comcast.github.io/v1
+apiVersion: kuberhealthy.github.io/v2
 kind: KuberhealthyCheck
 metadata:
   name: ssh-check
@@ -22,7 +22,7 @@ spec:
   podSpec:
     containers:
       - name: ssh-check
-        image: rjacks161/ssh-check:v1.0.0
+        image: rjacks161/ssh-check:v3.0.0
         imagePullPolicy: IfNotPresent
         env:
           - name: SSH_PRIVATE_KEY
