@@ -1,4 +1,4 @@
-apiVersion: comcast.github.io/v1
+apiVersion: kuberhealthy.github.io/v2
 kind: KuberhealthyCheck
 metadata:
   name: ssh-check

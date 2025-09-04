@@ -10,11 +10,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 
-	kh "github.com/kuberhealthy/kuberhealthy/v2/pkg/checks/external/checkclient"
-	"github.com/kuberhealthy/kuberhealthy/v2/pkg/kubeClient"
+	kh "github.com/kuberhealthy/kuberhealthy/v3/pkg/checkclient"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 var (
@@ -47,13 +48,25 @@ func main() {
 
 	ctx := context.Background()
 
-	client, err := kubeClient.Create(kubeConfigFile)
+	cfg, err := rest.InClusterConfig()
+	if err != nil {
+		cfg, err = clientcmd.BuildConfigFromFlags("", kubeConfigFile)
+		if err != nil {
+			errs = append(errs, err.Error())
+			if reportErr := kh.ReportFailure(errs); reportErr != nil {
+				log.Fatalln("error reporting to kuberhealthy: ", reportErr)
+			}
+			return
+		}
+	}
+
+	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
 		errs = append(errs, err.Error())
-		err = kh.ReportFailure(errs)
-		if err != nil {
-			log.Fatalln("error reporting to kuberhealthy: ", err)
+		if reportErr := kh.ReportFailure(errs); reportErr != nil {
+			log.Fatalln("error reporting to kuberhealthy: ", reportErr)
 		}
+		return
 	}
 
 	log.Infoln("Kubernetes client created.")
@@ -157,4 +170,20 @@ func ssh_check(node v1.Node) error {
 	}
 
 	return nil
+}
+
+func createClient(kubeConfigFile string) (*kubernetes.Clientset, error) {
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		config, err = clientcmd.BuildConfigFromFlags("", kubeConfigFile)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+	return clientset, nil
 }
