@@ -1,6 +1,6 @@
 module github.com/ssh-check
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/kuberhealthy/kuberhealthy/v3 v3.0.0-20250904060524-9ccb8db8e238
