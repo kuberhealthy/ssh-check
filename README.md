@@ -6,8 +6,9 @@ Check ssh connectivity to nodes within a cluster
 This repository builds the container image used by Kuberhealthy to run the ssh-check check.
 
 ## Image
+- `docker.io/kuberhealthy/ssh-check`
 - `ghcr.io/kuberhealthy/ssh-check`
-- Tags: short git SHA for `main` pushes and `vX.Y.Z` for releases.
+- Tags: `latest` and short git SHA for `main` pushes; `vX.Y.Z` for releases.
 
 ## Quick start
 - Apply the example manifest: `kubectl apply -f healthcheck.yaml`
